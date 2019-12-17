@@ -22,7 +22,13 @@ function fish_prompt
     else
         set_color brblue
     end
-    echo -n "λ "
+
+    if test (id -u) -eq 0
+        echo -n "# "
+    else
+        echo -n "\$ "
+    end
+
     set_color normal
 end
 
