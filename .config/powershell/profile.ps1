@@ -35,3 +35,5 @@ New-Alias open ii
 
 # Modules
 Import-Module DockerCompletion
+
+Clear-Host
