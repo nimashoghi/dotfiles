@@ -32,3 +32,6 @@ Set-PSReadlineKeyHandler -Key DownArrow -ScriptBlock {
 }
 
 New-Alias open ii
+
+# Modules
+Import-Module DockerCompletion
