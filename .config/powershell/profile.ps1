@@ -2,7 +2,6 @@ Set-PSReadLineKeyHandler -Key Enter -Function AcceptLine
 Set-PSReadLineKeyHandler -Chord Shift+Enter -Function AddLine
 
 Set-PSReadLineKeyHandler -Key Tab -Function MenuComplete
-Set-PSReadLineKeyHandler -Key `0 -Function MenuComplete
 
 Set-PSReadLineKeyHandler -Chord Ctrl+LeftArrow -Function BackwardWord
 Set-PSReadLineKeyHandler -Chord Ctrl+RightArrow -Function ForwardWord
