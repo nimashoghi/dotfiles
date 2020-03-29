@@ -19,7 +19,7 @@ Set-PSReadLineKeyHandler -Chord Shift+End -Function SelectLine
 Set-PSReadLineKeyHandler -Key Backspace -Function BackwardDeleteChar
 Set-PSReadLineKeyHandler -Key Delete -Function DeleteChar
 
-# Set-PSReadLineKeyHandler -Chord Ctrl+Backspace -Function BackwardKillWord
+Set-PSReadLineKeyHandler -Chord Ctrl+Backspace -Function BackwardKillWord
 Set-PSReadLineKeyHandler -Chord Ctrl+Delete -Function DeleteWord
 
 Set-PSReadlineKeyHandler -Key UpArrow -ScriptBlock {
@@ -35,5 +35,6 @@ New-Alias open ii
 
 # Modules
 Import-Module DockerCompletion
+Import-Module Posh-Git
 
 Clear-Host
