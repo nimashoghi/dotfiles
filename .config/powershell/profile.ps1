@@ -32,13 +32,11 @@ Set-PSReadlineKeyHandler -Key DownArrow -ScriptBlock {
 
 New-Alias open ii
 
-# Modules
-Import-Module DockerCompletion
-Import-Module Posh-Git
-Import-Module oh-my-posh
-Set-Theme pure
+# imports
+Import-Module -Name posh-git, oh-my-posh
 
 # theme settings
+Set-Theme pure
 $ThemeSettings.PromptSymbols.PromptIndicator = "λ"
 Set-PSReadLineOption -Colors @{
     Member    = "Magenta"

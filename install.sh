@@ -1,8 +1,6 @@
 #!/bin/sh
 
-pwsh -c "Install-Module -Force -Name DockerCompletion -Scope CurrentUser"
-pwsh -c "Install-Module -Force -Name Posh-Git -Scope CurrentUser"
-pwsh -c "Install-Module -Force -Name Set-PsEnv -Scope CurrentUser"
+pwsh -c "Install-Module -Force -Name posh-git -Scope CurrentUser"
 pwsh -c "Install-Module -Force -Name oh-my-posh -Scope CurrentUser"
 
 SCRIPT=$(readlink -f "$0")
