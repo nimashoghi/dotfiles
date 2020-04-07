@@ -1,36 +1,25 @@
 colors:
-    cursor:
-        text: "#fefff2"
-        cursor: "#f0cc09"
-
-    selection:
-        text: "#b5b5b5"
-        background: "#18354f"
-
     primary:
-        background: "#132738"
-        foreground: "#ffffff"
-
+        background: "0xEEEEEE"
+        foreground: "0x4D4D4C"
     normal:
-        black: "#000000"
-        red: "#ff0000"
-        green: "#38de21"
-        yellow: "#ffe50a"
-        blue: "#1460d2"
-        magenta: "#ff005d"
-        cyan: "#00bbbb"
-        white: "#bbbbbb"
-
+        black: "0xEDEDED"
+        red: "0xD7005F"
+        green: "0x718C00"
+        yellow: "0xD75F00"
+        blue: "0x4271AE"
+        magenta: "0x8959A8"
+        cyan: "0x3E999F"
+        white: "0x4D4D4C"
     bright:
-        black: "#555555"
-        red: "#f40e17"
-        green: "#3bd01d"
-        yellow: "#edc809"
-        blue: "#5555ff"
-        magenta: "#ff55ff"
-        cyan: "#6ae3fa"
-        white: "#ffffff"
-
+        black: "0x969694"
+        red: "0xD7005F"
+        green: "0x718C00"
+        yellow: "0xD75F00"
+        blue: "0x4271AE"
+        magenta: "0x8959A8"
+        cyan: "0x3E999F"
+        white: "0xF5F5F5"
 font:
     normal:
         family: "Essential PragmataPro"

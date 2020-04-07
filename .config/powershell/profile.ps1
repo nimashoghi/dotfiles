@@ -35,5 +35,16 @@ New-Alias open ii
 # Modules
 Import-Module DockerCompletion
 Import-Module Posh-Git
+Import-Module oh-my-posh
+Set-Theme pure
+
+# theme settings
+$ThemeSettings.PromptSymbols.PromptIndicator = "λ"
+Set-PSReadLineOption -Colors @{
+    Member    = "Magenta"
+    Number    = "Magenta"
+    Type      = "DarkGreen"
+    Selection = "DarkGreen"
+}
 
 Clear-Host
