@@ -33,7 +33,7 @@ Set-PSReadlineKeyHandler -Key DownArrow -ScriptBlock {
 New-Alias open ii
 
 # imports
-Import-Module -Name posh-git, oh-my-posh
+Import-Module -Name oh-my-posh, posh-git, PSUnixUtilCompleters
 
 # theme settings
 Set-Theme pure
