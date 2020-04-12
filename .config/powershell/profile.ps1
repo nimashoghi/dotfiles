@@ -45,4 +45,7 @@ Set-PSReadLineOption -Colors @{
     Selection = "DarkGreen"
 }
 
+# environment variables
+$env:DOCKER_CLI_EXPERIMENTAL = "enabled"
+
 Clear-Host
