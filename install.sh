@@ -2,7 +2,7 @@
 
 pwsh -c "Install-Module -Force -Name posh-git -Scope CurrentUser"
 pwsh -c "Install-Module -Force -Name oh-my-posh -Scope CurrentUser"
-pwsh -c "Install-Module -Force -Name PSUnixUtilCompleters -Scope CurrentUser -AcceptLicense"
+pwsh -c "Install-Module -Force -Name Microsoft.PowerShell.UnixCompleters -Scope CurrentUser"
 
 SCRIPT=$(readlink -f "$0")
 SCRIPTPATH=$(dirname "$SCRIPT")
