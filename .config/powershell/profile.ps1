@@ -47,5 +47,3 @@ Set-PSReadLineOption -Colors @{
 
 # environment variables
 $env:DOCKER_CLI_EXPERIMENTAL = "enabled"
-
-Clear-Host
