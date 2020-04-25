@@ -33,7 +33,9 @@ Set-PSReadlineKeyHandler -Key DownArrow -ScriptBlock {
 New-Alias open ii
 
 # imports
+$env:COMPLETION_SHELL_PREFERENCE = "zsh"
 Import-Module -Name Microsoft.PowerShell.UnixCompleters, oh-my-posh, posh-git
+Set-UnixCompleter -ShellType Zsh
 
 # theme settings
 Set-Theme pure
@@ -47,3 +49,4 @@ Set-PSReadLineOption -Colors @{
 
 # environment variables
 $env:DOCKER_CLI_EXPERIMENTAL = "enabled"
+$env:TERM = "xterm-256color"
