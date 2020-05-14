@@ -50,3 +50,88 @@ Set-PSReadLineOption -Colors @{
 # environment variables
 $env:DOCKER_CLI_EXPERIMENTAL = "enabled"
 $env:TERM = "xterm-256color"
+$env:PATH += ":/home/nimas/.local/bin"
+
+Clear-Host
+
+# functions
+function mkdir() {
+    <#
+    .FORWARDHELPTARGETNAME New-Item
+    .FORWARDHELPCATEGORY Cmdlet
+    #>
+
+    [CmdletBinding(DefaultParameterSetName = 'pathSet',
+        SupportsShouldProcess = $true,
+        SupportsTransactions = $true,
+        ConfirmImpact = 'Medium')]
+    [OutputType([System.IO.DirectoryInfo])]
+    param(
+        [Parameter(ParameterSetName = 'nameSet', Position = 0, ValueFromPipelineByPropertyName = $true)]
+        [Parameter(ParameterSetName = 'pathSet', Mandatory = $true, Position = 0, ValueFromPipelineByPropertyName = $true)]
+        [System.String[]]
+        ${Path},
+
+        [Parameter(ParameterSetName = 'nameSet', Mandatory = $true, ValueFromPipelineByPropertyName = $true)]
+        [AllowNull()]
+        [AllowEmptyString()]
+        [System.String]
+        ${Name},
+
+        [Parameter(ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
+        [System.Object]
+        ${Value},
+
+        [Switch]
+        ${Force},
+
+        [Parameter(ValueFromPipelineByPropertyName = $true)]
+        [System.Management.Automation.PSCredential]
+        ${Credential}
+    )
+
+    begin {
+        $wrappedCmd = $ExecutionContext.InvokeCommand.GetCommand('New-Item', [System.Management.Automation.CommandTypes]::Cmdlet)
+        $scriptCmd = { & $wrappedCmd -Type Directory @PSBoundParameters }
+
+        $steppablePipeline = $scriptCmd.GetSteppablePipeline()
+        $steppablePipeline.Begin($PSCmdlet)
+    }
+
+    process {
+        $steppablePipeline.Process($_)
+    }
+
+    end {
+        $steppablePipeline.End()
+    }
+}
+
+# aliases
+Set-Alias ac Add-Content
+Set-Alias cat Get-Content
+Set-Alias clear Clear-Host
+Set-Alias compare Compare-Object
+Set-Alias cp Copy-Item
+Set-Alias cpp Copy-ItemProperty
+Set-Alias diff Compare-Object
+Set-Alias gin Get-ComputerInfo
+Set-Alias gsv Get-Service
+Set-Alias kill Stop-Process
+Set-Alias ls Get-ChildItem
+Set-Alias man help
+Set-Alias mount New-PSDrive
+Set-Alias mv Move-Item
+Set-Alias ogv Out-GridView
+Set-Alias ps Get-Process
+Set-Alias rm Remove-Item
+Set-Alias rmdir Remove-Item
+Set-Alias sasv Start-Service
+Set-Alias shcm Show-Command
+Set-Alias sleep Start-Sleep
+Set-Alias sort Sort-Object
+Set-Alias spsv Stop-Service
+Set-Alias start Start-Process
+Set-Alias stz Set-TimeZone
+Set-Alias tee Tee-Object
+Set-Alias write Write-Output
