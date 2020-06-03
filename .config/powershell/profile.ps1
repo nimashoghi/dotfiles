@@ -135,3 +135,18 @@ Set-Alias start Start-Process
 Set-Alias stz Set-TimeZone
 Set-Alias tee Tee-Object
 Set-Alias write Write-Output
+
+function CodeHere() {
+    code .
+}
+Set-Alias code. CodeHere
+
+function Google(
+    [string[]]
+    [Parameter(ValueFromRemainingArguments)]
+    $Query
+) {
+    $queryEscaped = [System.Web.HttpUtility]::UrlEncode($Query -join " ")
+    $url = "https://www.google.com/search?q=$queryEscaped"
+    google-chrome $url
+}
