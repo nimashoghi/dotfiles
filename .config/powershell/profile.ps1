@@ -52,8 +52,6 @@ $env:DOCKER_CLI_EXPERIMENTAL = "enabled"
 $env:TERM = "xterm-256color"
 $env:PATH += ":/home/nimas/.local/bin"
 
-Clear-Host
-
 # functions
 function mkdir() {
     <#
