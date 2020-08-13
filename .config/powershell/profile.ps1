@@ -47,10 +47,12 @@ Set-PSReadLineOption -Colors @{
     Selection = "DarkGreen"
 }
 
+$homePath = Resolve-Path ~
+
 # environment variables
 $env:DOCKER_CLI_EXPERIMENTAL = "enabled"
 $env:TERM = "xterm-256color"
-$env:PATH += ":$(Resolve-Path ~)/.local/bin"
+$env:PATH += ":$homePath/.local/bin"
 
 # functions
 function mkdir() {
@@ -133,6 +135,30 @@ Set-Alias start Start-Process
 Set-Alias stz Set-TimeZone
 Set-Alias tee Tee-Object
 Set-Alias write Write-Output
+
+# add vscode server bin to path
+try {
+    if ($env:PATH.Contains(".vscode-server-insiders/")) {
+        throw $null
+    }
+    $path = Resolve-Path $homePath/.vscode-server-insiders/bin/*/bin -ErrorAction Stop
+    if ($path) {
+        $env:PATH += ":$path"
+    }
+}
+catch {
+    try {
+        if ($env:PATH.Contains(".vscode-server/")) {
+            throw $null
+        }
+        $path = Resolve-Path $homePath/.vscode-server/bin/*/bin -ErrorAction Stop
+        if ($path) {
+            $env:PATH += ":$path"
+        }
+    }
+    catch {
+    }
+}
 
 try {
     Get-Command "code-insiders" | Out-Null
