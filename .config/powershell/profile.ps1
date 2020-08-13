@@ -135,7 +135,7 @@ Set-Alias tee Tee-Object
 Set-Alias write Write-Output
 
 try {
-    Get-Command "code-insiders"
+    Get-Command "code-insiders" | Out-Null
     Set-Alias code code-insiders
 }
 catch {}
