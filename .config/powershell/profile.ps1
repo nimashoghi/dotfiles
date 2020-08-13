@@ -50,7 +50,7 @@ Set-PSReadLineOption -Colors @{
 # environment variables
 $env:DOCKER_CLI_EXPERIMENTAL = "enabled"
 $env:TERM = "xterm-256color"
-$env:PATH += ":/home/nimas/.local/bin"
+$env:PATH += ":$(Resolve-Path ~)/.local/bin"
 
 # functions
 function mkdir() {
@@ -133,6 +133,12 @@ Set-Alias start Start-Process
 Set-Alias stz Set-TimeZone
 Set-Alias tee Tee-Object
 Set-Alias write Write-Output
+
+try {
+    Get-Command "code-insiders"
+    Set-Alias code code-insiders
+}
+catch {}
 
 function CodeHere() {
     code .
