@@ -137,34 +137,19 @@ Set-Alias tee Tee-Object
 Set-Alias write Write-Output
 
 # add vscode server bin to path
-try {
+function AddVscodeServerInsiders {
     if ($env:PATH.Contains(".vscode-server-insiders/")) {
-        throw $null
+        return
     }
-    $path = Resolve-Path $homePath/.vscode-server-insiders/bin/*/bin -ErrorAction Stop
-    if ($path) {
-        $env:PATH += ":$path"
-    }
-}
-catch {
-    try {
-        if ($env:PATH.Contains(".vscode-server/")) {
-            throw $null
-        }
-        $path = Resolve-Path $homePath/.vscode-server/bin/*/bin -ErrorAction Stop
-        if ($path) {
-            $env:PATH += ":$path"
-        }
-    }
-    catch {
-    }
-}
 
-try {
-    Get-Command "code-insiders" | Out-Null
-    Set-Alias code code-insiders
+    if (!$env:VSCODE_GIT_ASKPASS_NODE) {
+        return
+    }
+
+    $path = $env:VSCODE_GIT_ASKPASS_NODE.Replace("/node", "/bin")
+    $env:PATH += ":$path"
 }
-catch {}
+AddVscodeServerInsiders
 
 function CodeHere() {
     code .
