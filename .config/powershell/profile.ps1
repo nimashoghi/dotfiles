@@ -168,4 +168,4 @@ function Google(
 
 $Global:DebugPreference = "Continue"
 $Global:InformationPreference = "Continue"
-$Global:ErrorActionPreference = "Continue"
+$Global:ErrorActionPreference = "Stop"
