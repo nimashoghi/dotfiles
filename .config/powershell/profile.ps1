@@ -165,3 +165,7 @@ function Google(
     $url = "https://www.google.com/search?q=$queryEscaped"
     google-chrome $url
 }
+
+$Global:DebugPreference = "Continue"
+$Global:InformationPreference = "Continue"
+$Global:ErrorActionPreference = "Continue"
