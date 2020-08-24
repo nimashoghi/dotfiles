@@ -151,14 +151,11 @@ function AddVscodeServerInsiders {
 }
 AddVscodeServerInsiders
 
-function SetupCodeAlias {
-    try {
-        Get-Command "code-insiders" | Out-Null
-        Set-Alias code code-insiders
-    }
-    catch {}
+try {
+    Get-Command "code-insiders" | Out-Null
+    Set-Alias code code-insiders
 }
-SetupCodeAlias
+catch {}
 
 function CodeHere() {
     code .
