@@ -32,14 +32,37 @@ Set-PSReadlineKeyHandler -Key DownArrow -ScriptBlock {
 
 New-Alias open ii
 
+#prompt
+function Get-ShortestLocationRepresentation() {
+    $currentLocation = (Get-Location).Path
+    $relative = "~/$([System.IO.Path]::GetRelativePath($env:HOME, $currentLocation))"
+    if ($relative -eq "~/.") {
+        $relative = "~"
+    }
+
+    if ($currentLocation.Length -lt $relative.Length) {
+        $currentLocation
+    }
+    else {
+        $relative
+    }
+}
+
+function prompt() {
+    $currentLocation = Get-ShortestLocationRepresentation
+
+    Write-Host -ForegroundColor Cyan $currentLocation
+    Write-Host -ForegroundColor Green -NoNewline "$("λ" * ($NestedPromptLevel + 1))"
+    " "
+}
+
+
 # imports
 $env:COMPLETION_SHELL_PREFERENCE = "zsh"
-Import-Module -Name Microsoft.PowerShell.UnixCompleters, oh-my-posh, posh-git
+Import-Module -Name Microsoft.PowerShell.UnixCompleters
 Set-UnixCompleter -ShellType Zsh
 
 # theme settings
-Set-Theme pure
-$ThemeSettings.PromptSymbols.PromptIndicator = "λ"
 Set-PSReadLineOption -Colors @{
     Member    = "Magenta"
     Number    = "Magenta"
