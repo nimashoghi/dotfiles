@@ -198,3 +198,7 @@ function Google(
 $Global:DebugPreference = "Continue"
 $Global:InformationPreference = "Continue"
 $Global:ErrorActionPreference = "Stop"
+
+# PSReadline
+Set-PSReadLineOption -PredictionSource History
+Set-PSReadLineOption -PredictionViewStyle ListView
