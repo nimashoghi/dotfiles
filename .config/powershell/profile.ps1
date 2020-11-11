@@ -200,5 +200,5 @@ $Global:InformationPreference = "Continue"
 $Global:ErrorActionPreference = "Stop"
 
 # PSReadline
-Set-PSReadLineOption -PredictionSource History
-Set-PSReadLineOption -PredictionViewStyle ListView
+Set-PSReadLineOption -PredictionSource HistoryAndPlugin
+Set-PSReadLineOption -PredictionViewStyle InlineView
