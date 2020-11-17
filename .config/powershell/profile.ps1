@@ -202,3 +202,4 @@ $Global:ErrorActionPreference = "Stop"
 # PSReadline
 Set-PSReadLineOption -PredictionSource HistoryAndPlugin
 Set-PSReadLineOption -PredictionViewStyle InlineView
+Set-PSReadLineOption -Colors @{ InlinePrediction = '#2F7004' }
