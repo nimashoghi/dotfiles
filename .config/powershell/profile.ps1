@@ -174,11 +174,10 @@ function AddVscodeServerInsiders {
 }
 AddVscodeServerInsiders
 
-try {
-    Get-Command "code-insiders" | Out-Null
+
+if (!(Get-Command "code" -ErrorAction SilentlyContinue) -and (Get-Command "code-insiders" -ErrorAction SilentlyContinue)) {
     Set-Alias code code-insiders
 }
-catch {}
 
 function CodeHere() {
     code .
