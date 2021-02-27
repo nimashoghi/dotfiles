@@ -21,11 +21,11 @@ Set-PSReadLineKeyHandler -Key Delete -Function DeleteChar
 Set-PSReadLineKeyHandler -Chord Ctrl+Backspace -Function BackwardKillWord
 Set-PSReadLineKeyHandler -Chord Ctrl+Delete -Function DeleteWord
 
-Set-PSReadlineKeyHandler -Key UpArrow -ScriptBlock {
+Set-PSReadLineKeyHandler -Key UpArrow -ScriptBlock {
     [Microsoft.PowerShell.PSConsoleReadLine]::HistorySearchBackward()
     [Microsoft.PowerShell.PSConsoleReadLine]::EndOfLine()
 }
-Set-PSReadlineKeyHandler -Key DownArrow -ScriptBlock {
+Set-PSReadLineKeyHandler -Key DownArrow -ScriptBlock {
     [Microsoft.PowerShell.PSConsoleReadLine]::HistorySearchForward()
     [Microsoft.PowerShell.PSConsoleReadLine]::EndOfLine()
 }
@@ -199,6 +199,6 @@ $Global:InformationPreference = "Continue"
 $Global:ErrorActionPreference = "Stop"
 
 # PSReadline
-Set-PSReadLineOption -PredictionSource HistoryAndPlugin
+Set-PSReadLineOption -PredictionSource History
 Set-PSReadLineOption -PredictionViewStyle InlineView
 Set-PSReadLineOption -Colors @{ InlinePrediction = '#2F7004' }
