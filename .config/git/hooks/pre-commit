@@ -1,17 +1,105 @@
-#!/usr/bin/env bash
-set -euo pipefail
+#!/bin/bash
 
-# 1) Run the repo's local hook in .git/hooks if present
-git_dir="$(git rev-parse --git-dir)"
-local_hook="$git_dir/hooks/pre-commit"
-if [ -x "$local_hook" ] && [ ! -L "$local_hook" ]; then
-  "$local_hook" "$@"
+# Author: xezrunner (github.com/xezrunner)
+# Inspired by Jonathan Blow's nocheckin setup with SVN (twitch.tv/j_blow) (youtube.com/@jblow888)
+# Credits to DustinGadal on r/Jai: reddit.com/r/Jai/comments/jp0vjy/nocheckin_behavior_in_gitsourcetree/gbfhzd1
+
+# gist.github.com/xezrunner/e6dbafcc21fcbc976c93bdee0f371a08
+
+# This pre-commit hook checks for the keyword "$NOCHECKIN_KEYWORD" in staged files,then aborts the commit
+# if any matches were found, with output of file path, line number and match preview.
+
+# Required programs/utilities: git, grep, xargs, wc (optional: awk for nicer formatting)
+
+# To install, copy and rename to <repo>/.git/hooks/pre-commit (merge contents if already exists)
+# The file name has to be "pre-commit" for Git to use it. It is also compatible with git GUIs.
+# On Unix, mark the file as executable with `chmod +x .git/hooks/pre-commit`.
+
+DEFAULT_KEYWORD='nocheckin'
+
+# Settings (can override from environment):
+NOCHECKIN_KEYWORD=${NOCHECKIN_KEYWORD:-$DEFAULT_KEYWORD}
+NOCHECKIN_ENABLE_AWK_FORMATTING=${NOCHECKIN_ENABLE_AWK_FORMATTING:-1} # only if SUPPORTS_AWK_FORMATTING=1 (system has awk)
+NOCHECKIN_MAX_COLUMNS=${NOCHECKIN_MAX_COLUMNS:-120}
+
+# Define colors only when in a console and it supports them (GUIs like Github Desktop wouldn't parse these at all):
+ncolors=$(tput colors)
+if test -t 1 && test -n "$ncolors" && test $ncolors -ge 8; then
+    HAS_COLORS=1
+	CL_RED=$'\033[31m'
+	CL_BOLDRED=$'\033[1;31m'
+	CL_NONE=$'\033[0m'
 fi
 
-# 2) Global "nocheckin" check against the *staged* content
-if git grep -n -I -i -F --cached 'nocheckin' >/dev/null; then
-  echo >&2 "❌ Commit blocked: staged changes contain 'nocheckin'."
-  git grep -n -I -i -F --cached 'nocheckin' >&2
-  echo >&2 "Hint: you can bypass with 'git commit --no-verify' (not recommended)."
-  exit 1
+OUTPUT_MESSAGE="${CL_BOLDRED}Error:${CL_NONE} '$NOCHECKIN_KEYWORD' found in staged files:"
+
+# Get staged files containing the search target
+# --staged: only look at files that have been added to staging (pre-commit)
+# --diff-filter=d: exclude files that contain the keyword, but are staged for deletion
+SEARCH_CMD="git diff --staged --diff-filter=d --name-only --relative -i -G $NOCHECKIN_KEYWORD"
+
+# Scanning:
+GREP_CMD="grep -H $NOCHECKIN_KEYWORD -i -n --color=auto" # <filename>:line******
+
+SUPPORTS_AWK_FORMATTING=$(command -v awk >/dev/null 2>&1 && [ "$HAS_COLORS" = "1" ] && echo 1)
+GREP_CMD_AWK="grep --color=never -n -i -C 1 "$NOCHECKIN_KEYWORD""
+
+process_file() {
+    if [ "$NOCHECKIN_ENABLE_AWK_FORMATTING" != "1" ] || [ "$SUPPORTS_AWK_FORMATTING" != 1 ]; then
+		$GREP_CMD "$file"; return
+    fi
+
+    echo "  - in $1:" # in <file>:
+    $GREP_CMD_AWK "$file" | \
+
+    # Replace - or : for line numbers with a known delimiter:
+    sed -E 's/^([0-9]+)[:|-]/\1<nocheckin_grep_delimiter>/' | \
+
+    # Format output: '<line>: ...<match>...', newline between match groups
+	awk -v keyword="$NOCHECKIN_KEYWORD" -v maxlen=$NOCHECKIN_MAX_COLUMNS '
+	{
+        if ($0 == "--") { print ""; next } # newline on match groups
+
+        split($0, parts, /<nocheckin_grep_delimiter>/)
+		line_num = parts[1]
+		content  = parts[2]
+
+		if (length(content) == 0) next # skip empty lines
+
+		keyword_pos = index(tolower(content), tolower(keyword)) # find keyword position
+		if (!keyword_pos) keyword_pos = 1
+		start = 1; end = length(content)
+
+        # Truncate lines:
+		if (length(content) > maxlen) {
+			if (keyword_pos > maxlen/2)   start = keyword_pos - int(maxlen/2) # adjust start to center keyword
+			if (start + maxlen - 1 < end) end   = start + maxlen - 1          # clamp end to limit if it does not fit
+			else                          start = end - maxlen + 1            # otherwise, move start point
+
+			if (start < 1) start = 1 # clamp
+		}
+
+		preview = substr(content, start, end-start+1)      # assemble
+		if (start > 1)             preview = "..." preview # add truncation marks
+		if (end < length(content)) preview = preview "..."
+
+        print line_num": " preview
+	}
+    ' | \
+    grep --color=auto -i -E 'nocheckin|$' # highlight matches
+}
+
+# Main:
+files=($($SEARCH_CMD))
+if (( ${#files[@]} > 0 )); then
+	echo -e $OUTPUT_MESSAGE
+
+	for ((i=0; i<${#files[@]}; i++)); do
+		file="${files[$i]}"
+        process_file "$file"
+
+		if [ $i -lt $((${#files[@]}-1)) ]; then echo; fi # newline between files
+	done
+
+	exit 1 # abort commit
 fi
