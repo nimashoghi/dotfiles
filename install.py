@@ -43,7 +43,7 @@ def _install_dotfiles():
         # create a backup of it first. For directories, we merge them recursively.
         home = Path.home()
         for item in Path(tmpdir).iterdir():
-            if item.name in {"install.py", ".git", ".gitignore"}:
+            if item.name in {"install.py", ".git", ".gitignore", "README.md"}:
                 continue
 
             dest = home / item.name
