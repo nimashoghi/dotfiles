@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# 1) Run the repo's local hook in .git/hooks if present
+git_dir="$(git rev-parse --git-dir)"
+local_hook="$git_dir/hooks/pre-commit"
+if [ -x "$local_hook" ] && [ ! -L "$local_hook" ]; then
+  "$local_hook" "$@"
+fi
+
+# 2) Global "nocheckin" check against the *staged* content
+if git grep -n -I -i -F --cached 'nocheckin' >/dev/null; then
+  echo >&2 "❌ Commit blocked: staged changes contain 'nocheckin'."
+  git grep -n -I -i -F --cached 'nocheckin' >&2
+  echo >&2 "Hint: you can bypass with 'git commit --no-verify' (not recommended)."
+  exit 1
+fi
