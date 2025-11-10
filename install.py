@@ -77,6 +77,22 @@ def _merge_directory(src: Path, dest: Path):
             print(f"Installed {dest_item}")
 
 
+def _install_omf():
+    # Install Oh My Fish shell framework if we're on fish shell
+    if shutil.which("fish") is None:
+        return
+    if (Path.home() / ".local" / "share" / "omf").exists():
+        return
+
+    # curl https://raw.githubusercontent.com/oh-my-fish/oh-my-fish/master/bin/install | fish
+    subprocess.run(
+        "curl https://raw.githubusercontent.com/oh-my-fish/oh-my-fish/master/bin/install | fish",
+        shell=True,
+        check=True,
+    )
+    print("Oh My Fish installed successfully.")
+
+
 def _set_git_configs():
     # Set global git configurations
     subprocess.run(
@@ -90,6 +106,7 @@ def main():
     _install_uv()
     _install_xonsh()
     _install_dotfiles()
+    _install_omf()
     _set_git_configs()
 
 
