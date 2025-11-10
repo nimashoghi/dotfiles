@@ -40,24 +40,41 @@ def _install_dotfiles():
 
         # With the exception of install.py, copy all files to the home directory
         # We should do this non-destructively, i.e., if a file exists, we should
-        # create a backup of it first.
+        # create a backup of it first. For directories, we merge them recursively.
         home = Path.home()
         for item in Path(tmpdir).iterdir():
             if item.name in {"install.py", ".git", ".gitignore"}:
                 continue
 
             dest = home / item.name
-            if dest.exists():
-                backup = dest.with_suffix(dest.suffix + ".backup")
-                dest.rename(backup)
-                print(f"Backed up {dest} to {backup}")
-
             if item.is_dir():
-                shutil.copytree(item, dest)
+                _merge_directory(item, dest)
             else:
+                if dest.exists():
+                    backup = dest.with_suffix(dest.suffix + ".backup")
+                    dest.rename(backup)
+                    print(f"Backed up {dest} to {backup}")
                 shutil.copy2(item, dest)
-            print(f"Installed {dest}")
+                print(f"Installed {dest}")
     print("Dotfiles installed successfully.")
+
+
+def _merge_directory(src: Path, dest: Path):
+    """Recursively merge src directory into dest directory."""
+    dest.mkdir(parents=True, exist_ok=True)
+
+    for item in src.iterdir():
+        dest_item = dest / item.name
+
+        if item.is_dir():
+            _merge_directory(item, dest_item)
+        else:
+            if dest_item.exists():
+                backup = dest_item.with_suffix(dest_item.suffix + ".backup")
+                dest_item.rename(backup)
+                print(f"Backed up {dest_item} to {backup}")
+            shutil.copy2(item, dest_item)
+            print(f"Installed {dest_item}")
 
 
 def _set_git_configs():
