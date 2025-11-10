@@ -23,12 +23,14 @@ NOCHECKIN_ENABLE_AWK_FORMATTING=${NOCHECKIN_ENABLE_AWK_FORMATTING:-1} # only if 
 NOCHECKIN_MAX_COLUMNS=${NOCHECKIN_MAX_COLUMNS:-120}
 
 # Define colors only when in a console and it supports them (GUIs like Github Desktop wouldn't parse these at all):
-ncolors=$(tput colors)
-if test -t 1 && test -n "$ncolors" && test $ncolors -ge 8; then
-    HAS_COLORS=1
-	CL_RED=$'\033[31m'
-	CL_BOLDRED=$'\033[1;31m'
-	CL_NONE=$'\033[0m'
+if test -t 1 && test -n "$TERM"; then
+    ncolors=$(tput colors 2>/dev/null)
+    if test -n "$ncolors" && test $ncolors -ge 8; then
+        HAS_COLORS=1
+        CL_RED=$'\033[31m'
+        CL_BOLDRED=$'\033[1;31m'
+        CL_NONE=$'\033[0m'
+    fi
 fi
 
 OUTPUT_MESSAGE="${CL_BOLDRED}Error:${CL_NONE} '$NOCHECKIN_KEYWORD' found in staged files:"
